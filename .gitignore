@@ -39,8 +39,8 @@ bin/
 # macOS
 .DS_Store
 
-# Generated sources
-/openapi/
+# Generated sources (keep OpenAPI spec but ignore generated files)
+# /openapi/
 
 # Logs
 *.log
