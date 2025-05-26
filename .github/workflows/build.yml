@@ -57,7 +57,7 @@ jobs:
         retention-days: 30
         
     - name: Publish to GitHub Packages
-      run: ./gradlew publish
+      run: ./gradlew publish -x openApiGenerate
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
