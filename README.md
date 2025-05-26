@@ -1,5 +1,7 @@
 # TEI4J
 
+[![JitPack](https://jitpack.io/v/PAIR-Systems-Inc/tei4j.svg)](https://jitpack.io/#PAIR-Systems-Inc/tei4j)
+
 A Java client library for [HuggingFace Text Embeddings Inference (TEI)](https://github.com/huggingface/text-embeddings-inference).
 
 ## Features
@@ -20,7 +22,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.PAIR-Systems-Inc:tei4j:v1.0.0'
+    implementation 'com.github.PAIR-Systems-Inc:tei4j:main-SNAPSHOT' // Latest development
+    // Or use a specific version: 'com.github.PAIR-Systems-Inc:tei4j:v1.0.2'
 }
 ```
 
@@ -38,12 +41,12 @@ dependencies {
     <dependency>
         <groupId>com.github.PAIR-Systems-Inc</groupId>
         <artifactId>tei4j</artifactId>
-        <version>v1.0.0</version>
+        <version>main-SNAPSHOT</version> <!-- Latest development -->
+        <!-- Or use a specific version: <version>v1.0.2</version> -->
     </dependency>
 </dependencies>
 ```
 
-[![](https://jitpack.io/v/PAIR-Systems-Inc/tei4j.svg)](https://jitpack.io/#PAIR-Systems-Inc/tei4j)
 
 ## Quick Start
 
