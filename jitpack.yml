@@ -4,4 +4,10 @@ before_install:
   - chmod +x gradlew
 install:
   - ./gradlew openApiGenerate
-  - ./gradlew publishToMavenLocal -x javadoc
+  - |
+    # Fix duplicate variable issue in generated code
+    FILE="build/generated/src/main/java/ai/pairsys/tei4j/client/model/PredictInputOneOfInner.java"
+    if [ -f "$FILE" ]; then
+      sed -i '70,71d' "$FILE"
+    fi
+  - ./gradlew publishToMavenLocal -x javadoc -x openApiGenerate
