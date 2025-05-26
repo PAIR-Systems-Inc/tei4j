@@ -4,8 +4,8 @@ plugins {
     id("org.openapi.generator") version "7.10.0"
 }
 
-group = "ai.pairsys"
-version = "1.0-SNAPSHOT"
+group = "com.github.PAIR-Systems-Inc"
+version = "1.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -69,9 +69,9 @@ sourceSets {
     }
 }
 
-// tasks.compileJava {
-//     dependsOn("openApiGenerate")
-// }
+tasks.compileJava {
+    dependsOn("openApiGenerate")
+}
 
 tasks.named("sourcesJar") {
     dependsOn("openApiGenerate")
@@ -85,7 +85,7 @@ publishing {
             pom {
                 name.set("TEI4J")
                 description.set("Java client library for HuggingFace Text Embeddings Inference (TEI)")
-                url.set("https://github.com/pairsys/tei4j")
+                url.set("https://github.com/PAIR-Systems-Inc/tei4j")
                 
                 licenses {
                     license {
@@ -96,9 +96,15 @@ publishing {
                 
                 developers {
                     developer {
-                        id.set("pairsys")
-                        name.set("PairSys")
+                        id.set("pair-systems")
+                        name.set("PAIR Systems Inc")
                     }
+                }
+                
+                scm {
+                    connection.set("scm:git:git://github.com/PAIR-Systems-Inc/tei4j.git")
+                    developerConnection.set("scm:git:ssh://github.com/PAIR-Systems-Inc/tei4j.git")
+                    url.set("https://github.com/PAIR-Systems-Inc/tei4j")
                 }
             }
         }
