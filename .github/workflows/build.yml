@@ -38,6 +38,15 @@ jobs:
     - name: Generate OpenAPI client
       run: ./gradlew openApiGenerate
       
+    - name: Fix generated code compilation issue
+      run: |
+        # Fix duplicate variable issue in PredictInputOneOfInner.java
+        FILE="build/generated/src/main/java/ai/pairsys/tei4j/client/model/PredictInputOneOfInner.java"
+        if [ -f "$FILE" ]; then
+          # Remove duplicate lines (lines 70-71 are duplicates of 67-68)
+          sed -i '70,71d' "$FILE"
+        fi
+      
     - name: Build with Gradle
       run: ./gradlew build -x javadoc
       
