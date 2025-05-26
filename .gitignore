@@ -42,5 +42,8 @@ bin/
 # Generated sources (keep OpenAPI spec but ignore generated files)
 # /openapi/
 
+# Test projects
+test-project/
+
 # Logs
 *.log
