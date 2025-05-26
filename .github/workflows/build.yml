@@ -56,6 +56,11 @@ jobs:
           build/libs/*.jar
         retention-days: 30
         
+    - name: Publish to GitHub Packages
+      run: ./gradlew publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Upload to release (on release)
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
