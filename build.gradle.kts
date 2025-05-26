@@ -38,12 +38,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
-val generatedDir = layout.buildDirectory.dir("generated")
-
 openApiGenerate {
     generatorName.set("java")
     inputSpec.set("$projectDir/openapi/tei-openapi.json")
-    outputDir.set(generatedDir.get().asFile.absolutePath)
+    outputDir.set("$buildDir/generated")
     packageName.set("ai.pairsys.tei4j.client")
     apiPackage.set("ai.pairsys.tei4j.client.api")
     modelPackage.set("ai.pairsys.tei4j.client.model")
@@ -64,7 +62,7 @@ openApiGenerate {
 sourceSets {
     main {
         java {
-            srcDir(generatedDir.map { it.dir("src/main/java") })
+            srcDir("$buildDir/generated/src/main/java")
         }
     }
 }
