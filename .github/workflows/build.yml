@@ -35,11 +35,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Generate OpenAPI client
-      run: ./gradlew openApiGenerate
-      
-    - name: Fix generated code compilation issue
+    - name: Generate OpenAPI client and fix compilation issue
       run: |
+        ./gradlew openApiGenerate
         # Fix duplicate variable issue in PredictInputOneOfInner.java
         FILE="build/generated/src/main/java/ai/pairsys/tei4j/client/model/PredictInputOneOfInner.java"
         if [ -f "$FILE" ]; then
@@ -48,7 +46,7 @@ jobs:
         fi
       
     - name: Build with Gradle
-      run: ./gradlew build -x javadoc
+      run: ./gradlew build -x javadoc -x openApiGenerate
       
     - name: Upload JAR artifacts
       uses: actions/upload-artifact@v4
