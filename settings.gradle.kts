@@ -1,0 +1,1 @@
+rootProject.name = "tei4j"
