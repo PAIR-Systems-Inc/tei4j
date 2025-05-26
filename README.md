@@ -15,20 +15,35 @@ A Java client library for [HuggingFace Text Embeddings Inference (TEI)](https://
 ### Gradle
 
 ```gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
-    implementation 'ai.pairsys:tei4j:1.0-SNAPSHOT'
+    implementation 'com.github.PAIR-Systems-Inc:tei4j:v1.0.0'
 }
 ```
 
 ### Maven
 
 ```xml
-<dependency>
-    <groupId>ai.pairsys</groupId>
-    <artifactId>tei4j</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.PAIR-Systems-Inc</groupId>
+        <artifactId>tei4j</artifactId>
+        <version>v1.0.0</version>
+    </dependency>
+</dependencies>
 ```
+
+[![](https://jitpack.io/v/PAIR-Systems-Inc/tei4j.svg)](https://jitpack.io/#PAIR-Systems-Inc/tei4j)
 
 ## Quick Start
 
