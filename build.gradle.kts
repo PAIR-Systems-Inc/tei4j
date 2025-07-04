@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.PAIR-Systems-Inc"
-version = "1.1.1"
+version = "1.1.2"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -76,9 +76,39 @@ tasks.register("fixGeneratedCode") {
     doLast {
         val file = File("$buildDir/generated/src/main/java/ai/pairsys/tei4j/client/model/PredictInputBatchInner.java")
         if (file.exists()) {
-            exec {
-                commandLine("sed", "-i", "70,71d", file.absolutePath)
+            val content = file.readText()
+            val lines = content.lines().toMutableList()
+            
+            // Find and remove duplicate variable declarations
+            val duplicatePattern = Regex("\\s*final Type typeInstanceListString = new TypeToken<List<String>>\\(\\)\\{\\}\\.getType\\(\\);")
+            val adapterPattern = Regex("\\s*final TypeAdapter<List<String>> adapterListString = \\(TypeAdapter<List<String>>\\) gson\\.getDelegateAdapter\\(this, TypeToken\\.get\\(typeInstanceListString\\)\\);")
+            
+            var firstTypeFound = false
+            var firstAdapterFound = false
+            val linesToRemove = mutableListOf<Int>()
+            
+            for (i in lines.indices) {
+                if (duplicatePattern.matches(lines[i])) {
+                    if (firstTypeFound) {
+                        linesToRemove.add(i)
+                    } else {
+                        firstTypeFound = true
+                    }
+                } else if (adapterPattern.matches(lines[i])) {
+                    if (firstAdapterFound) {
+                        linesToRemove.add(i)
+                    } else {
+                        firstAdapterFound = true
+                    }
+                }
             }
+            
+            // Remove lines in reverse order to maintain indices
+            linesToRemove.sortedDescending().forEach { index ->
+                lines.removeAt(index)
+            }
+            
+            file.writeText(lines.joinToString("\n"))
         }
     }
 }
