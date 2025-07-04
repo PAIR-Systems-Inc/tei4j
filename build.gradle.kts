@@ -19,11 +19,20 @@ repositories {
 }
 
 dependencies {
-    // OpenAPI generated client dependencies
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // Retrofit (transitively pulls OkHttp 4.x)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("io.gsonfire:gson-fire:1.9.0")
+    
+    // Jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
+    
+    // Jakarta WS-RS (for generated JSON class)
+    implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.1.0")
+    
+    // misc
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
     
@@ -40,19 +49,18 @@ tasks.test {
 
 openApiGenerate {
     generatorName.set("java")
+    library.set("retrofit2")
     inputSpec.set("$projectDir/openapi/tei-openapi.json")
     outputDir.set("$buildDir/generated")
     packageName.set("ai.pairsys.tei4j.client")
     apiPackage.set("ai.pairsys.tei4j.client.api")
     modelPackage.set("ai.pairsys.tei4j.client.model")
     configOptions.set(mapOf(
-        "library" to "okhttp-gson",
+        "serializationLibrary" to "jackson",
         "dateLibrary" to "java8",
-        "java8" to "true",
+        "useJakartaEe" to "true",
         "hideGenerationTimestamp" to "true",
         "generatePom" to "false",
-        "serializationLibrary" to "gson",
-        "useJakartaEe" to "true",
         "openApiNullable" to "false",
         "legacyDiscriminatorBehavior" to "false",
         "disallowAdditionalPropertiesIfNotPresent" to "false"
@@ -63,6 +71,7 @@ sourceSets {
     main {
         java {
             srcDir("$buildDir/generated/src/main/java")
+            exclude("**/auth/OAuth*")
         }
     }
 }
