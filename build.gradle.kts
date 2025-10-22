@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.PAIR-Systems-Inc"
-version = "1.1.2"
+version = "1.2.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -74,41 +74,72 @@ sourceSets {
 tasks.register("fixGeneratedCode") {
     dependsOn("openApiGenerate")
     doLast {
-        val file = File("$buildDir/generated/src/main/java/ai/pairsys/tei4j/client/model/PredictInputBatchInner.java")
-        if (file.exists()) {
-            val content = file.readText()
-            val lines = content.lines().toMutableList()
-            
-            // Find and remove duplicate variable declarations
+        fun removeDuplicateListAdapterDeclarations(file: File) {
+            if (!file.exists()) return
+
+            val lines = file.readLines().toMutableList()
             val duplicatePattern = Regex("\\s*final Type typeInstanceListString = new TypeToken<List<String>>\\(\\)\\{\\}\\.getType\\(\\);")
             val adapterPattern = Regex("\\s*final TypeAdapter<List<String>> adapterListString = \\(TypeAdapter<List<String>>\\) gson\\.getDelegateAdapter\\(this, TypeToken\\.get\\(typeInstanceListString\\)\\);")
-            
+
             var firstTypeFound = false
             var firstAdapterFound = false
             val linesToRemove = mutableListOf<Int>()
-            
+
             for (i in lines.indices) {
-                if (duplicatePattern.matches(lines[i])) {
-                    if (firstTypeFound) {
-                        linesToRemove.add(i)
-                    } else {
-                        firstTypeFound = true
+                when {
+                    duplicatePattern.matches(lines[i]) -> {
+                        if (firstTypeFound) {
+                            linesToRemove.add(i)
+                        } else {
+                            firstTypeFound = true
+                        }
                     }
-                } else if (adapterPattern.matches(lines[i])) {
-                    if (firstAdapterFound) {
-                        linesToRemove.add(i)
-                    } else {
-                        firstAdapterFound = true
+                    adapterPattern.matches(lines[i]) -> {
+                        if (firstAdapterFound) {
+                            linesToRemove.add(i)
+                        } else {
+                            firstAdapterFound = true
+                        }
                     }
                 }
             }
-            
-            // Remove lines in reverse order to maintain indices
+
+            if (linesToRemove.isEmpty()) return
+
             linesToRemove.sortedDescending().forEach { index ->
                 lines.removeAt(index)
             }
-            
+
             file.writeText(lines.joinToString("\n"))
+        }
+
+        fun fixTruncationDefaults(file: File) {
+            if (!file.exists()) return
+            val original = file.readText()
+            val updated = original.replace("= right;", "= TruncationDirection.RIGHT;")
+            if (original != updated) {
+                file.writeText(updated)
+            }
+        }
+
+        val modelDir = File("$buildDir/generated/src/main/java/ai/pairsys/tei4j/client/model")
+
+        listOf(
+            "PredictInputBatchInner.java",
+            "PredictInputOneOfInner.java"
+        ).forEach { fileName ->
+            removeDuplicateListAdapterDeclarations(File(modelDir, fileName))
+        }
+
+        listOf(
+            "EmbedAllRequest.java",
+            "EmbedRequest.java",
+            "EmbedSparseRequest.java",
+            "PredictRequest.java",
+            "RerankRequest.java",
+            "SimilarityParameters.java"
+        ).forEach { fileName ->
+            fixTruncationDefaults(File(modelDir, fileName))
         }
     }
 }

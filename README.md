@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation 'com.github.PAIR-Systems-Inc:tei4j:main-SNAPSHOT' // Latest development
-    // Or use a specific version: 'com.github.PAIR-Systems-Inc:tei4j:v1.0.2'
+    // Or use a specific version: 'com.github.PAIR-Systems-Inc:tei4j:v1.2.0'
 }
 ```
 
@@ -42,7 +42,7 @@ dependencies {
         <groupId>com.github.PAIR-Systems-Inc</groupId>
         <artifactId>tei4j</artifactId>
         <version>main-SNAPSHOT</version> <!-- Latest development -->
-        <!-- Or use a specific version: <version>v1.0.2</version> -->
+        <!-- Or use a specific version: <version>v1.2.0</version> -->
     </dependency>
 </dependencies>
 ```
