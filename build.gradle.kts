@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.PAIR-Systems-Inc"
-version = "1.2.1"
+version = "v1.2.1"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
