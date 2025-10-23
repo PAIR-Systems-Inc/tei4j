@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.PAIR-Systems-Inc"
-version = "1.2.0"
+version = "1.2.1"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -122,6 +122,15 @@ tasks.register("fixGeneratedCode") {
             }
         }
 
+        fun fixPromptNameDefault(file: File) {
+            if (!file.exists()) return
+            val original = file.readText()
+            val updated = original.replace("private String promptName = \"null\";", "private String promptName = null;")
+            if (original != updated) {
+                file.writeText(updated)
+            }
+        }
+
         val modelDir = File("$buildDir/generated/src/main/java/ai/pairsys/tei4j/client/model")
 
         listOf(
@@ -140,6 +149,16 @@ tasks.register("fixGeneratedCode") {
             "SimilarityParameters.java"
         ).forEach { fileName ->
             fixTruncationDefaults(File(modelDir, fileName))
+        }
+
+        listOf(
+            "EmbedAllRequest.java",
+            "EmbedRequest.java",
+            "EmbedSparseRequest.java",
+            "SimilarityParameters.java",
+            "TokenizeRequest.java"
+        ).forEach { fileName ->
+            fixPromptNameDefault(File(modelDir, fileName))
         }
     }
 }
